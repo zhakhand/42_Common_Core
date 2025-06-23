@@ -159,14 +159,12 @@ int PmergeMe::distToPair(const std::pair<int, int>& pair, const Container& bigs)
 template <typename Container, typename PairContainer>
 void PmergeMe::insertSmalls(Container& bigs, Container& smalls, int leftover, const PairContainer& pairs) {
 	VecInt jacobsthal = generateJacobsthal(smalls.size());
-	std::vector<bool> inserted(smalls.size(), false);
 
 	for (size_t i = 0; i < jacobsthal.size(); ++i) {
 		int index = jacobsthal[i];
 		if (index < (int)smalls.size()) {
 			int bigPair = distToPair<Container>(pairs[index], bigs);
 			binaryInsert(bigs, smalls[index], bigPair);
-			inserted[index] = true;
 		}
 	}
 	if (leftover != -1) binaryInsert(bigs, leftover, bigs.size());

@@ -8,7 +8,9 @@ class Object {
 public:
 	int	_value;
 	int	_depth;
-	std::vector<int> _pairs;
+	int	jacobsthalNumber;
+	bool isLeftover;
+	std::vector<int> pairs;
 
 	Object();
 	Object(int value);
@@ -19,5 +21,6 @@ public:
 
 std::ostream& operator<<(std::ostream& o, const Object& obj);
 bool operator>(const Object& lhs, const Object& rhs);
+bool operator<(const Object& lhs, const Object& rhs);
 
 #endif

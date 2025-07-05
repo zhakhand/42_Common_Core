@@ -8,13 +8,13 @@ int main(int ac, char *av[])
 	}
 	try {
 		PmergeMe vecMerger;
-		VecInt vec = vecMerger.sortVec(ac, av);
+		Vec vec = vecMerger.sortVec(ac, av);
 	} catch (std::exception& e) {
 		std::cout << e.what();
 	}
 	try {
 		PmergeMe deqMerger;
-		DeqInt deq = deqMerger.sortDeq(ac, av);
+		Deq deq = deqMerger.sortDeq(ac, av);
 	} catch (std::exception& e) {
 		std::cout << e.what();
 	}

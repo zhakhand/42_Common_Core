@@ -8,60 +8,61 @@
 #include <algorithm>
 #include <iostream>
 #include <ctime>
+#include "object.hpp"
 
-typedef std::vector<int> VecInt;
-typedef VecInt::iterator VecIntIt;
-typedef std::vector<std::pair<int, int> > VecPair;
-typedef VecPair::iterator VecPairIt; 
-typedef std::deque<int> DeqInt;
-typedef DeqInt::iterator DeqIntIt;
-typedef std::deque<std::pair<int, int> > DeqPair;
-typedef DeqPair::iterator DeqPairIt;
+typedef std::vector<Object> Vec;
+typedef Vec::iterator VecIt;
+typedef Vec::const_iterator VecConstIt;
+
+typedef std::deque<Object> Deq;
+typedef Deq::iterator DeqIt;
+typedef Deq::const_iterator DeqConstIt;
 
 class PmergeMe {
 private:
 	PmergeMe(const PmergeMe& other);
 	PmergeMe& operator=(const PmergeMe& other);
-	int counter;
 public:
+	int counter;
 	PmergeMe();
 	~PmergeMe();
-	const VecInt sortVec(int ac, char *av[]);
-	const DeqInt sortDeq(int ac, char *av[]);
-
-private:
-
 	int toInt(const std::string& number);
-	VecInt generateJacobsthal(int size);
-	
-	/* TEMPLATES BABYYY!!! */
 
-	template <typename Container>
-	Container checkInput(int ac, char *av[]);
+	void checkInputVec(int ac, char *av[], Vec& vec);
+	const Vec sortVec(int ac, char *av[]);
+	Vec mergeInsertionVec(Vec& vec);
+	void insertSmallVec(Vec& bigs, Vec& smalls, Object& leftover);
+	void findInsertVec(Vec& bigs, const Vec& smalls, int index);
+	void binaryInsertVec(Vec& bigs, const Object& obj, int dist);
 
-	template <typename PairContainer, typename Container>
-	PairContainer createPairs(const Container& container);
+	void checkInputDeq(int ac, char *av[], Deq& deq);
+	const Deq sortDeq(int ac, char *av[]);
+	Deq mergeInsertionDeq(Deq& deq);
+	void insertSmallDeq(Deq& bigs, Deq& smalls, Object& leftover);
+	void findInsertDeq(Deq& bigs, const Deq& smalls, int index);
+	void binaryInsertDeq(Deq& bigs, const Object& obj, int dist);
 
-	template <typename PairContainer, typename Container>
-	Container collectSmalls(const PairContainer& container);
-
-	template <typename PairContainer, typename Container>
-	Container collectBigs(const PairContainer& container);
-
-	template <typename Container>
-	void binaryInsert(Container& container, int value, int distance);
-
-	template <typename Container>
-	int distToPair(const std::pair<int, int>& pair, const Container& bigs);
-
-	template <typename Container, typename PairContainer>
-	void insertSmalls(Container& bigs, Container& smalls, int leftover, const PairContainer& pairs);
-
-	template <typename Container, typename PairContainer>
-	Container mergeInsertionSort(Container& container);
-
-	template <typename Container, typename Iterator>
-	void dump(Container container);
+	template <typename Container, typename iterator>
+	void dump(const Container& container);
 };
+
+template <typename Container, typename iterator>
+void PmergeMe::dump(const Container& container) {
+	iterator start = container.begin();
+	iterator end = container.end();
+	short count = 0;
+	while (start != end) {
+		if (count == 20) {
+			std::cout << "[...]";
+			break;
+		}
+		std::cout << *start << " ";
+		start++;
+		count++;
+	}
+	std::cout << "\n";
+}
+
+
 
 #endif

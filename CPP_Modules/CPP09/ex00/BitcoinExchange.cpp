@@ -59,20 +59,32 @@ std::string checkDate(const std::string& date) {
 	if (date.at(4) != '-' || date.at(7) != '-')
 		throw std::invalid_argument("Error: Invalid Date Format! Use YYYY-MM-DD \n");
 	int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+	if (date.substr(0, 4).find_first_not_of("0123456789") != std::string::npos)
+		throw std::invalid_argument("Error: Invalid Date!\n");
 	int year = std::atoi(date.substr(0, 4).c_str());
 	if (year < 2009) throw std::invalid_argument("Error: Invalid Date!\n");
+
+	if (date.substr(5, 2).find_first_not_of("0123456789") != std::string::npos)
+		throw std::invalid_argument("Error: Invalid Date!\n");
 	int month = std::atoi(date.substr(5, 2).c_str());
 	if (month < 1 || month > 12) throw std::invalid_argument("Error: Invalid Date!\n");
+
+	if (date.substr(8, 2).find_first_not_of("0123456789") != std::string::npos)
+		throw std::invalid_argument("Error: Invalid Date!\n");
 	int day = std::atoi(date.substr(8, 2).c_str());
+
 	if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) days[1] = 29;
 	if (day < 1 || day > days[month - 1]) throw std::invalid_argument("Error: Invalid Date!\n");
 	if (day == 1 && month == 1 && year == 2009) throw std::invalid_argument("Error: Invalid Date!\n");
 	return date;
 }
 
-float checkVal(const std::string& val) {
+double checkVal(const std::string& val) {
 	if (val.find_first_not_of("0123456789.") != std::string::npos)
 		throw std::invalid_argument("Error: Provided value is not a valid number!\n");
+	if (val.length() == 1 && val[0] == '.')
+		throw std::invalid_argument("Error: Provide a proper number!\n");
 	bool dot = false;
 	for (size_t i = 0; i < val.size(); ++i) {
 		if (!dot && val.at(i) == '.') 
@@ -80,7 +92,7 @@ float checkVal(const std::string& val) {
 		else if (dot && val.at(i) == '.')
 			throw std::invalid_argument("Error: Provided value is not a valid number!\n");
 	}
-	float num = std::strtof(val.c_str(), NULL);
+	double num = std::strtod(val.c_str(), NULL);
 	if (num > 1000) throw std::invalid_argument("Error: too large a number!\n");
 	return num;
 }

@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <iostream>
 #include <ctime>
-#include "object.hpp"
+#include "Object.hpp"
 
 typedef std::vector<Object> Vec;
 typedef Vec::iterator VecIt;

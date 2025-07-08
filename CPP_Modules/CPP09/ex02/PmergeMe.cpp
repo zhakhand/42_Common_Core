@@ -1,5 +1,5 @@
 #include "PmergeMe.hpp"
-#include "object.hpp"
+#include "Object.hpp"
 #include <limits>
 
 PmergeMe::PmergeMe() : counter(0){}

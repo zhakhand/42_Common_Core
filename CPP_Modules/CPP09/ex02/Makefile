@@ -19,7 +19,7 @@ RM = rm -rf
 
 NAME = PmergeMe
 
-SRCS = main.cpp PmergeMe.cpp object.cpp vectorSort.cpp dequeSort.cpp
+SRCS = main.cpp PmergeMe.cpp Object.cpp vectorSort.cpp dequeSort.cpp
 
 OBJSDIR = objs
 

@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./requirements/nginx
+    container_name: nginx
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    restart: unless-stopped
+
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    env_file:
+      - .env
+    environment:
+      DB_ROOT: ${DB_ROOT}
+      DB_ROOT_PW: ${DB_ROOTPWD}
+      DB_USER: ${DB_USER}
+      DB_USERPW: ${DB_USERPWD}
+      DB_NAME: wordpress
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - inception
+    restart: unless-stopped
+
+  wordpress:
+    build: ./requirements/wordpress
+    container_name: wordpress
+    env_file:
+      - .env
+    environment:
+      WP_ROOT: ${WP_ADMIN}
+      WP_ROOTPWD: ${WP_ADMINPASS}
+      WP_USER: ${WP_USER}
+      WP_USERPASS: ${WP_USERPASS}
+      WP_DB_HOST: mariadb
+      WP_DB_NAME: wordpress
+      WP_DB_USER: ${DB_USER}
+      WP_DB_USERPWD: ${DB_USERPWD}
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    restart: unless-stopped
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/dzhakhan/data/mariadb
+      o: bind
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/dzhakhan/data/wordpress
+      o: bind

@@ -1,32 +1,17 @@
-NAME = inception
-
-all: up
-
-up:
-	@mkdir -p /home/dzhakhan/data/mariadb
-	@mkdir -p /home/dzhakhan/data/wordpress
-	docker-compose -f docker-compose.yml up -d --build
+all:
+	docker compose -f srcs/docker-compose.yml up -d --build
 
 down:
-	docker-compose -f docker-compose.yml down
-
-stop:
-	docker-compose -f docker-compose.yml stop
-
-start:
-	docker-compose -f docker-compose.yml start
-
-logs:
-	docker-compose -f docker-compose.yml logs -f
+	docker compose -f srcs/docker-compose.yml down -v
 
 clean: down
 	docker system prune -af
+	docker volume prune -f
 
 fclean: clean
-	sudo rm -rf /home/dzhakhan/data/mariadb/*
-	sudo rm -rf /home/dzhakhan/data/wordpress/*
-	docker volume prune -f
+	sudo rm -rf ${HOME}/data/wordpress/*
+	sudo rm -rf ${HOME}/data/mariadb/*
 
 re: fclean all
 
-.PHONY: all up down stop start logs clean fclean re
+.PHONY: all down clean fclean re

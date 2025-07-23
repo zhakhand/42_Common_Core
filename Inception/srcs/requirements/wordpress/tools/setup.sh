@@ -1,17 +1,6 @@
 #!/bin/bash
-set -e
-
-if [ ! -f /var/www/html/wp-config-sample.php ]; then
-    echo "Wordpress is not installed..."
-    wget https://wordpress.org/latest.tar.gz
-    tar -xzf latest.tar.gz --strip-components=1
-    rm latest.tar.gz
-    chown -R www-data:www-data /var/www/html
-    chmod -R 755 /var/www/html
-fi
 
 if [ ! -f wp-config.php ]; then
-    echo "trying to log in"
     wp core config --dbname="${DB_NAME}" \
         --dbuser="${DB_USER}" \
         --dbpass="${DB_USERPWD}" \
@@ -21,9 +10,9 @@ if [ ! -f wp-config.php ]; then
 fi
 
 if wp core is-installed --path="/var/www/html" --allow-root; then
-    echo "Wordpress is here"
+    echo "Wordpress is installed"
 else
-    echo "I am here"
+    echo "Setting up Wordpress"
     wp core install --url="https://dzhakhan.42.fr" \
         --title="INCEPTION" \
         --admin_user="${WP_ROOT}" \
@@ -32,8 +21,11 @@ else
         --skip-email \
         --path="/var/www/html" \
         --allow-root
+    wp user create "${WP_USER}" "${WP_USER}@42.fr" \
+        --role=author \
+        --user_pass="${WP_USERPASS}" \
+        --path="/var/www/html" \
+        --allow-root
 fi
-
-mkdir -p /run/php
 
 exec php-fpm7.4 -F
